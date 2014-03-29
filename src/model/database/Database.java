@@ -2,52 +2,84 @@ package model.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.mysql.jdbc.ResultSetMetaData;
 
 public class Database {
 
-	private String server, username, password,database;
+	private String server, username, password, database;
 	private Connection conn;
 
-	public Database(String server, String database, String username, String password) {
+	public Database(String server, String database, String username,
+			String password) {
 		this.server = server;
 		this.database = database;
 		this.username = username;
 		this.password = password;
 	}
-	
-	public boolean connect() {
+
+	public void connect() throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://" + server + "/"
 					+ database, username, password);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		return true;
 	}
 
-	public void close() {
+	public void close() throws SQLException {
+		if (conn != null) {
+			conn.close();
+		}
+		conn = null;
+	}
+
+	public int update(String sql, Object... o) throws SQLException {
+		PreparedStatement stmt = createStatement(sql, o);
+
+		return stmt.executeUpdate();
+	}
+
+	public void query(String sql, Object... o) throws SQLException {
+		PreparedStatement stmt = createStatement(sql, o);
+
+		ResultSet set = stmt.executeQuery();
+
+
+		java.sql.ResultSetMetaData rsmd = set.getMetaData();
+		int columnsNumber = rsmd.getColumnCount();
+		while (set.next()) {
+			for (int i = 1; i <= columnsNumber; i++) {
+				if (i > 1)
+					System.out.print(",  ");
+				String columnValue = set.getString(i);
+				System.out.print(columnValue + " " + rsmd.getColumnName(i));
+			}
+			System.out.println("");
+		}
 
 	}
 
-	public static void query(String sql, Object... o) {
+	private PreparedStatement createStatement(String sql, Object... o)
+			throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement(sql);
+
 		for (int i = 0; i < o.length; i++) {
 			switch (o[i].getClass().toString()) {
-			case "class java.lang.Double":
-				System.out.println("Double: " + (double) o[i]);
-				break;
 			case "class java.lang.Integer":
-				System.out.println("Integer: " + (int) o[i]);
+				stmt.setInt(i + 1, (int) o[i]);
 				break;
 			default:
-				System.out.println("String: " + o[i].toString());
+				stmt.setString(i + 1, o[i].toString());
 			}
 		}
+
+		return stmt;
 	}
 
 }
