@@ -6,8 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.mysql.jdbc.ResultSetMetaData;
-
 public class Database {
 
 	private String server, username, password, database;

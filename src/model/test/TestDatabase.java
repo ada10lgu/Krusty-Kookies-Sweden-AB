@@ -58,16 +58,7 @@ public class TestDatabase {
 		}
 	}
 	
-	@Test
-	public void testSimpleQuery() {
-		try {
-			db.query("SELECT * FROM courses");
-		} catch (SQLException e) {
-			fail(e.getMessage());
-			
-		}
-		
-	}
+
 	
 
 }
