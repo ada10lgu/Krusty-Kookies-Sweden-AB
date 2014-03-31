@@ -23,9 +23,8 @@ public class SpecialArticleRowPane extends JPanel implements ActionListener{
 	private Factory f;
 	private RawMaterialPane topPane;
 	
-	public SpecialArticleRowPane(Factory f,RawMaterialPane topPane) {
+	public SpecialArticleRowPane(Factory f) {
 		this.f = f;
-		this.topPane = topPane;
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		add(new JLabel("Ammount:"));
@@ -54,7 +53,6 @@ public class SpecialArticleRowPane extends JPanel implements ActionListener{
 			ammount = Integer.parseInt(ammountField.getText());
 			
 			f.addArticle(new Article(0,name,0,""), ammount);
-			topPane.updateList();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Must insert number");
 		}

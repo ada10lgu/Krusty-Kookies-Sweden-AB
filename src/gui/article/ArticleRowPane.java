@@ -21,14 +21,12 @@ public class ArticleRowPane extends JPanel implements ActionListener{
 	
 	private Article a;
 	private Factory f;
-	private RawMaterialPane topPane;
 	private JTextField textField;
 	
 	
-	public ArticleRowPane(Factory f, RawMaterialPane topPane, Article a) {
+	public ArticleRowPane(Factory f, Article a) {
 		this.f = f;
 		this.a = a;
-		this.topPane = topPane;
 		
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
@@ -52,7 +50,6 @@ public class ArticleRowPane extends JPanel implements ActionListener{
 		try {
 			int ammount = Integer.parseInt(textField.getText());
 			f.addArticle(a, ammount);
-			topPane.updateList();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Must insert number");
 		}

@@ -24,13 +24,11 @@ public class Main extends JFrame {
 		setSize(600, 600);
 		setBackground(Color.gray);
 
-		// Create the tab pages
-		ProductionPane p2 = new ProductionPane();
 		OrderPane p3 = new OrderPane();
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("Raw materials", new RawMaterialPane(f));
-		tabbedPane.addTab("Production", p2);
+		tabbedPane.addTab("Production", new ProductionPane(f));
 		tabbedPane.addTab("Orders and Deliveries", p3);
 		add(tabbedPane, BorderLayout.CENTER);
 

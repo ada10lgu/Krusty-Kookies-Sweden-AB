@@ -3,6 +3,9 @@ drop table if exists customer;
 drop table if exists article;
 drop table if exists product;
 drop table if exists ingridient;
+drop table if exists invoice;
+drop table if exists invoiceDetails;
+drop table if exists pallet;
 set foreign_key_checks = 1;
 
 
@@ -37,6 +40,33 @@ CREATE TABLE ingridient (
 	foreign key(product) REFERENCES  product(name),
 	foreign key(article) REFERENCES  article(id)	
 
+);
+
+CREATE TABLE invoice (
+	id int auto_increment,
+	status ENUM('pending','delivered') default 'pending',
+	customer int not null,
+	latestDeliveryDate date not null,
+	primary key(id),
+	foreign key(customer) REFERENCES customer(id)	
+);
+
+CREATE TABLE invoiceDetails (
+	id int auto_increment,
+	product varchar(255) not null,
+	invoice int not null,
+	primary key(id),
+	foreign key(product) REFERENCES product(name),
+	foreign key(invoice) REFERENCES invoice(id)
+);
+
+CREATE TABLE pallet (
+	id int auto_increment,
+	bakingDate date not null,
+	invoice int not null,
+	status ENUM('available','blocked','reserved') default 'available',
+	primary key(id),
+	foreign key(invoice) REFERENCES invoice(id)
 );
 
 INSERT INTO customer (name, address) VALUES ("Finkakor AB","Helsingborg");

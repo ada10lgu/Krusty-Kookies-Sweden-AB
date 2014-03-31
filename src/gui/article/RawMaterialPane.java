@@ -1,6 +1,8 @@
 package gui.article;
 
 import java.awt.BorderLayout;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -10,7 +12,7 @@ import model.Article;
 import model.Factory;
 
 @SuppressWarnings("serial")
-public class RawMaterialPane extends JPanel {
+public class RawMaterialPane extends JPanel implements Observer {
 	private JPanel contentPanel;
 	private Factory f;
 
@@ -22,14 +24,17 @@ public class RawMaterialPane extends JPanel {
 		contentPanel.setLayout(layout);
 		JScrollPane scrollPane = new JScrollPane(contentPanel);
 		add(scrollPane, BorderLayout.CENTER);
-		updateList();
+		update(null, null);
+		f.addObserver(this);
 	}
 
-	public void updateList() {
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
 		contentPanel.removeAll();
-		contentPanel.add(new SpecialArticleRowPane(f,this));
+		contentPanel.add(new SpecialArticleRowPane(f));
 		for (Article a : f.getAllRawMaterials()) {
-			contentPanel.add(new ArticleRowPane(f,this,a));
-		}
+			contentPanel.add(new ArticleRowPane(f,a));
+		}		
 	}
 }

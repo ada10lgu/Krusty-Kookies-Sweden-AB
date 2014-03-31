@@ -4,12 +4,15 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Scanner;
 import java.util.TreeMap;
 
+import com.mysql.jdbc.UpdatableResultSet;
+
 import model.database.Database;
 
-public class Factory {
+public class Factory extends Observable {
 
 	private Database db;
 	public static final String DATABASE_CONNECTION = "sql/databaseconnection";
@@ -66,6 +69,8 @@ public class Factory {
 			addNewArticle(article.getName(), ammount, article.getPrefix());
 		else
 			increseArticle(article.getId(), ammount);
+		setChanged();
+		notifyObservers();
 	}
 
 	private void increseArticle(int id, int ammount) {
@@ -111,6 +116,8 @@ public class Factory {
 
 			}
 
+		
+			
 		} catch (SQLException e) {
 			terminate("Could get products from the database.", sql);
 		}
@@ -156,18 +163,32 @@ public class Factory {
 				return false;
 		}
 		
-		
+		for (int id : articlesNeeded.keySet()) {
+			int n = articlesNeeded.get(id);
+			
+			reduceArticle(id,n);
+		}
 
 		System.out.println(articlesNeeded);
+		setChanged();
+		notifyObservers();
 		return true;
+	}
+
+	private void reduceArticle(int id, int n) {
+		String sql = "UPDATE article SET ammount = ammount - ? WHERE id = ? ";
+		try {
+			db.update(sql,n, id);
+		} catch (SQLException e) {
+			terminate("Could not alter the ammount of an article.", sql);
+		}
+
 	}
 
 	private boolean hasArticle(int id, int n) {
 		String sql = "SELECT ammount FROM article WHERE id = ? LIMIT 1";
 		try {
 			ResultSet result = db.query(sql, id);
-
-			System.out.println(id);
 			if (result.next()) {
 				int ammount = result.getInt("ammount");
 				if (ammount >= n)

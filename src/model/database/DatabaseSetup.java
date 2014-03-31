@@ -76,7 +76,7 @@ public class DatabaseSetup {
 				}
 			}
 		}
-		
+		s.close();
 		return querys;
 	}
 	
