@@ -7,20 +7,33 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import model.Article;
+import model.Factory;
 
 @SuppressWarnings("serial")
 public class ArticleRowPane extends JPanel implements ActionListener{
 
 	public static final int TEXT_HEIGHT = 23;
 	
-	public ArticleRowPane(Article a) {
+	private Article a;
+	private Factory f;
+	private RawMaterialPane topPane;
+	private JTextField textField;
+	
+	
+	public ArticleRowPane(Factory f, RawMaterialPane topPane, Article a) {
+		this.f = f;
+		this.a = a;
+		this.topPane = topPane;
+		
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		JTextField textField = new JTextField();
+		add(new JLabel("Ammount:"));
+		textField = new JTextField();
 		
 		textField.setPreferredSize(new Dimension(100,TEXT_HEIGHT));
 		add(textField);
@@ -36,7 +49,13 @@ public class ArticleRowPane extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		System.out.println("hej");
+		try {
+			int ammount = Integer.parseInt(textField.getText());
+			f.addArticle(a, ammount);
+			topPane.updateList();
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Must insert number");
+		}
 	}
 	
 }

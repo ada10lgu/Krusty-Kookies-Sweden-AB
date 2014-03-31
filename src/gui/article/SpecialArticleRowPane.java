@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,11 +21,14 @@ public class SpecialArticleRowPane extends JPanel implements ActionListener{
 	private JTextField nameField;
 	private JTextField ammountField;
 	private Factory f;
+	private RawMaterialPane topPane;
 	
-	public SpecialArticleRowPane(Factory f) {
+	public SpecialArticleRowPane(Factory f,RawMaterialPane topPane) {
 		this.f = f;
+		this.topPane = topPane;
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
+		add(new JLabel("Ammount:"));
 		ammountField = new JTextField();
 		
 		ammountField.setPreferredSize(new Dimension(100,TEXT_HEIGHT));
@@ -50,6 +54,7 @@ public class SpecialArticleRowPane extends JPanel implements ActionListener{
 			ammount = Integer.parseInt(ammountField.getText());
 			
 			f.addArticle(new Article(0,name,0,""), ammount);
+			topPane.updateList();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Must insert number");
 		}
