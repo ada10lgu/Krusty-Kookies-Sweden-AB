@@ -27,4 +27,12 @@ public class Product {
 		return sb.toString();
 	}
 
+	public String getName() {
+		return name;
+	}
+	
+	public TreeMap<Article, Double> getIngirdients() {
+		return ingridients;
+	}
+	
 }

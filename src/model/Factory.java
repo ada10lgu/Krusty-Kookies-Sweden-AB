@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import model.database.Database;
 
@@ -147,8 +148,15 @@ public class Factory {
 
 	
 	public boolean produceProduct(Product p, int ammount) {
+		int factor = 15*10*36;
+		TreeMap<Integer,Integer> articlesNeeded = new TreeMap<>();
 		
-		
+		for (Article a : p.getIngirdients().keySet()) {
+			int id = a.getId();
+			int n = (int)(p.getIngirdients().get(a) * factor*ammount); 
+			articlesNeeded.put(id,n);
+		}
+		System.out.println(articlesNeeded);
 		return false;
 	}
 	
