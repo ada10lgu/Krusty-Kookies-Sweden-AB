@@ -49,25 +49,25 @@ INSERT INTO customer (name, address) VALUES ("Gastkakor AB","Häassleholm");
 INSERT INTO customer (name, address) VALUES ("Skanekakor AB","Perstorp");
 
 
-INSERT INTO article (name, ammount,prefix) VALUES ("Flour",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Butter",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Icing sugar",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Roasted, chopped nuts",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Fine-ground nuts",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Ground, roasted nuts",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Bread crumbs",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Sugar",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Egg whites",1000,"dl");
-INSERT INTO article (name, ammount,prefix) VALUES ("Marzipan",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Eggs",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Potato starch",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Wheat flour",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Sodium bicarbonate",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Vanilla",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Chopped almonds",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Cinnamon",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Vanilla sugar",1000,"g");
-INSERT INTO article (name, ammount,prefix) VALUES ("Chocolate",1000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Flour",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Butter",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Icing sugar",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Roasted, chopped nuts",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Fine-ground nuts",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Ground, roasted nuts",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Bread crumbs",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Sugar",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Egg whites",1000000000,"dl");
+INSERT INTO article (name, ammount,prefix) VALUES ("Marzipan",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Eggs",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Potato starch",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Wheat flour",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Sodium bicarbonate",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Vanilla",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Chopped almonds",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Cinnamon",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Vanilla sugar",1000000000,"g");
+INSERT INTO article (name, ammount,prefix) VALUES ("Chocolate",1000000000,"g");
 
 
 INSERT INTO product(name) VALUES ("Nut ring");

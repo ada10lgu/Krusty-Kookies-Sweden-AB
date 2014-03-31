@@ -1,8 +1,6 @@
 package model.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -55,7 +53,7 @@ public class TestFactory {
 			int ammount = data.get(i).getAmmount();
 			
 			assertEquals(i, id);
-			assertEquals(1000, ammount);
+			assertEquals(1000000000, ammount);
 		}
 		
 	}
@@ -111,9 +109,9 @@ public class TestFactory {
 		System.out.println(f.getAllProducts());
 	}
 	
-	@Test
+	@Test                                                                                                                                                                                        
 	public void testProduceProduct() {
 		Product p = f.getAllProducts().get(0);
-		f.produceProduct(p, 10);
+		assertTrue(f.produceProduct(p, 1));
 	}
 }

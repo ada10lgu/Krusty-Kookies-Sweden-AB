@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import model.database.Database;
 
@@ -14,6 +13,7 @@ public class Factory {
 
 	private Database db;
 	public static final String DATABASE_CONNECTION = "sql/databaseconnection";
+	private final int FACTOR = 15 * 10 * 36;
 
 	public Factory(String database) {
 		try {
@@ -37,9 +37,8 @@ public class Factory {
 	public ArrayList<Article> getAllRawMaterials() {
 		ArrayList<Article> data = new ArrayList<>();
 
-		data.add(new Article(0, "New rawmaterial", 0, ""));
 
-		String sql = "SELECT id, name, ammount,prefix FROM article;";
+		String sql = "SELECT id, name, ammount,prefix FROM article ORDER BY name;";
 		try {
 			ResultSet result = db.query(sql);
 
@@ -62,7 +61,7 @@ public class Factory {
 		return data;
 	}
 
-	public void addArticle(Article article, int ammount) {
+	public synchronized void addArticle(Article article, int ammount) {
 		if (article.getId() == 0)
 			addNewArticle(article.getName(), ammount, article.getPrefix());
 		else
@@ -96,7 +95,7 @@ public class Factory {
 
 	public ArrayList<Product> getAllProducts() {
 		ArrayList<Product> products = new ArrayList<>();
-		
+
 		String sql = "SELECT name FROM product";
 
 		try {
@@ -107,9 +106,9 @@ public class Factory {
 				TreeMap<Article, Double> data = getTngridients(name);
 
 				Product p = new Product(name, data);
-				
+
 				products.add(p);
-				
+
 			}
 
 		} catch (SQLException e) {
@@ -146,20 +145,41 @@ public class Factory {
 		return data;
 	}
 
-	
-	public boolean produceProduct(Product p, int ammount) {
-		int factor = 15*10*36;
-		TreeMap<Integer,Integer> articlesNeeded = new TreeMap<>();
-		
+	public synchronized boolean produceProduct(Product p, int ammount) {
+		TreeMap<Integer, Integer> articlesNeeded = new TreeMap<>();
+
 		for (Article a : p.getIngirdients().keySet()) {
 			int id = a.getId();
-			int n = (int)(p.getIngirdients().get(a) * factor*ammount); 
-			articlesNeeded.put(id,n);
+			int n = (int) (p.getIngirdients().get(a) * FACTOR * ammount);
+			articlesNeeded.put(id, n);
+			if (!hasArticle(id, n))
+				return false;
 		}
+		
+		
+
 		System.out.println(articlesNeeded);
+		return true;
+	}
+
+	private boolean hasArticle(int id, int n) {
+		String sql = "SELECT ammount FROM article WHERE id = ? LIMIT 1";
+		try {
+			ResultSet result = db.query(sql, id);
+
+			System.out.println(id);
+			if (result.next()) {
+				int ammount = result.getInt("ammount");
+				if (ammount >= n)
+					return true;
+			}
+		} catch (SQLException e) {
+			terminate("Could not calculate ammount of an article.", sql);
+		}
+
 		return false;
 	}
-	
+
 	private void terminate(String message, String sql) {
 		System.err.println(message);
 		System.err.println("Query: " + sql);
