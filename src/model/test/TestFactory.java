@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import model.Article;
 import model.Factory;
+import model.Product;
 import model.database.DatabaseSetup;
 
 import org.junit.Before;
@@ -108,5 +109,11 @@ public class TestFactory {
 	@Test
 	public void testGetProducts() {
 		System.out.println(f.getAllProducts());
+	}
+	
+	@Test
+	public void testProduceProduct() {
+		Product p = f.getAllProducts().get(0);
+		f.produceProduct(p, 10);
 	}
 }
