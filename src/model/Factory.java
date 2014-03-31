@@ -145,6 +145,13 @@ public class Factory {
 		return data;
 	}
 
+	
+	public boolean produceProduct(Product p, int ammount) {
+		
+		
+		return false;
+	}
+	
 	private void terminate(String message, String sql) {
 		System.err.println(message);
 		System.err.println("Query: " + sql);
