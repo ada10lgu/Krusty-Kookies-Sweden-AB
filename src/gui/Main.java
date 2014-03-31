@@ -1,8 +1,8 @@
 package gui;
 
-import gui.article.ArticlePane;
-import gui.orders.PanelThree;
-import gui.production.PanelTwo;
+import gui.article.RawMaterialPane;
+import gui.orders.OrderPane;
+import gui.production.ProductionPane;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,12 +25,11 @@ public class Main extends JFrame {
 		setBackground(Color.gray);
 
 		// Create the tab pages
-		ArticlePane p1 = new ArticlePane(f);
-		PanelTwo p2 = new PanelTwo();
-		PanelThree p3 = new PanelThree();
+		ProductionPane p2 = new ProductionPane();
+		OrderPane p3 = new OrderPane();
 
 		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("Raw Materials and Recepies", p1);
+		tabbedPane.addTab("Raw materials", new RawMaterialPane(f));
 		tabbedPane.addTab("Production", p2);
 		tabbedPane.addTab("Orders and Deliveries", p3);
 		add(tabbedPane, BorderLayout.CENTER);

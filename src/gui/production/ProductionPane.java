@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-public class PanelTwo extends JPanel {
+public class ProductionPane extends JPanel {
 	
-	public PanelTwo(){
+	public ProductionPane(){
 		createPage();
 	}
 	

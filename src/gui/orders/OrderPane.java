@@ -26,10 +26,10 @@ import javax.swing.event.ListSelectionListener;
 
 
 
-public class PanelThree extends JPanel {
+public class OrderPane extends JPanel {
 	private static JList<String> customerList;
 
-	public PanelThree(){
+	public OrderPane(){
 		createPage();
 	}
 	
