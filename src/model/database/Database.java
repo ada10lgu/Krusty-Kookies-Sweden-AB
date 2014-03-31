@@ -43,24 +43,12 @@ public class Database {
 		return stmt.executeUpdate();
 	}
 
-	public void query(String sql, Object... o) throws SQLException {
+	public ResultSet query(String sql, Object... o) throws SQLException {
 		PreparedStatement stmt = createStatement(sql, o);
 
 		ResultSet set = stmt.executeQuery();
 
-
-		java.sql.ResultSetMetaData rsmd = set.getMetaData();
-		int columnsNumber = rsmd.getColumnCount();
-		while (set.next()) {
-			for (int i = 1; i <= columnsNumber; i++) {
-				if (i > 1)
-					System.out.print(",  ");
-				String columnValue = set.getString(i);
-				System.out.print(columnValue + " " + rsmd.getColumnName(i));
-			}
-			System.out.println("");
-		}
-
+		return set;
 	}
 
 	private PreparedStatement createStatement(String sql, Object... o)
