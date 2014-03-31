@@ -37,30 +37,26 @@ public class TestFactory {
 
 		ArrayList<Article> data = f.getAllRawMaterials();
 
-		assertEquals(data.get(0).getId(), 0);
+		
 		assertEquals(data.get(0).getName(), "New rawmaterial");
-		assertEquals(data.get(0).getAmmount(), 0);
+		assertEquals(data.get(1).getName(), "Flour");
 
-		assertEquals(data.get(1).getId(), 1);
-		assertEquals(data.get(1).getName(), "smör");
-		assertEquals(data.get(1).getAmmount(), 700);
+		assertEquals(data.get(2).getName(), "Butter");
 
-		assertEquals(data.get(2).getId(), 2);
-		assertEquals(data.get(2).getName(), "socker");
-		assertEquals(data.get(2).getAmmount(), 800);
+		assertEquals(data.get(3).getName(), "Icing sugar");
 
-		assertEquals(data.get(3).getId(), 3);
-		assertEquals(data.get(3).getName(), "choklad");
-		assertEquals(data.get(3).getAmmount(), 650);
+		assertEquals(data.get(4).getName(), "Roasted, chopped nuts");
 
-		assertEquals(data.get(4).getId(), 4);
-		assertEquals(data.get(4).getName(), "salt");
-		assertEquals(data.get(4).getAmmount(), 1000);
+		assertEquals(data.get(5).getName(), "Fine-ground nuts");
 
-		assertEquals(data.get(5).getId(), 5);
-		assertEquals(data.get(5).getName(), "bananer");
-		assertEquals(data.get(5).getAmmount(), 0);
-
+		for (int i = 1; i < data.size();i++ ) {
+			int id = data.get(i).getId();
+			int ammount = data.get(i).getAmmount();
+			
+			assertEquals(i, id);
+			assertEquals(1000, ammount);
+		}
+		
 	}
 
 	@Test
@@ -88,10 +84,11 @@ public class TestFactory {
 	@Test
 	public void testAddNewArticle() {
 		int id = 0;
-		String name = "Tomat";
+		String name = "Tomato";
+		String prefix = "dl";
 		int ammount = 300;
 		int wrongAmmount = 200;
-		Article a = new Article(id,name,wrongAmmount);
+		Article a = new Article(id,name,wrongAmmount,prefix);
 		
 		int numberOfArticles = f.getAllRawMaterials().size();
 		
@@ -104,8 +101,12 @@ public class TestFactory {
 		assertEquals(numberOfArticles+1, data.size());
 		assertEquals(name, last.getName());
 		assertEquals(ammount, last.getAmmount());
+		assertEquals(prefix, last.getPrefix());
 		assertFalse(id==last.getId());
-		
-
+	}
+	
+	@Test
+	public void testGetProducts() {
+		System.out.println(f.getAllProducts());
 	}
 }
