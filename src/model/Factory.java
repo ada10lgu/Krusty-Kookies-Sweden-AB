@@ -33,6 +33,8 @@ public class Factory {
 	public ArrayList<Triplet<Integer,String,Integer>> getAllRawMaterials() {
 		ArrayList<Triplet<Integer,String,Integer>> data = new ArrayList<>();
 		
+		data.add(new Triplet<Integer,String,Integer>(0,"New rawmaterial",0));
+		
 		String sql = "SELECT id, name, ammount FROM article;";
 		try {
 			ResultSet result = db.query(sql);
@@ -55,4 +57,42 @@ public class Factory {
 		return data;
 	}
 
+	public void addArticle(int id, String name, int ammount) {
+		if (id == 0)
+			addNewArticle(name,ammount);
+		else
+			increseArticle(id,ammount);
+		
+		
+	}
+
+	private void increseArticle(int id, int ammount) {
+		String sql = "UPDATE article SET ammount = ? WHERE id = ? LIMIT 1";
+		try {
+			db.update(sql,ammount,id);			
+			
+		} catch (SQLException e) {
+			System.err.println("Could not update row in database.");
+			System.err.println("Query: " + sql);
+			System.err.println("Terminating system!");
+			System.exit(1);
+		}
+		
+	}
+
+	private void addNewArticle(String name, int ammount) {
+		String sql = "INSERT INTO article(name,ammount) VALUES (?,?)";
+		try {
+			db.update(sql,name,ammount);
+
+			
+		} catch (SQLException e) {
+			System.err.println("Could not add new article to the database.");
+			System.err.println("Query: " + sql);
+			System.err.println("Terminating system!");
+			System.exit(1);
+		}
+		
+	}
+	
 }
