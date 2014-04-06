@@ -43,4 +43,16 @@ public class Product {
 		return ingridients;
 	}
 
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Product)
+			return obj.hashCode() == hashCode();
+		return false;
+	}
+	
 }
