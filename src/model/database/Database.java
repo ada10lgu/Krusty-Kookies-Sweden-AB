@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Database {
 
@@ -38,22 +39,34 @@ public class Database {
 	}
 
 	public int update(String sql, Object... o) throws SQLException {
-		PreparedStatement stmt = createStatement(sql, o);
+		PreparedStatement stmt = createStatement(0,sql, o);
 
 		return stmt.executeUpdate();
 	}
+	
+	public int insert(String sql, Object... o) throws SQLException {
+		PreparedStatement stmt = createStatement(Statement.RETURN_GENERATED_KEYS,sql, o);
+
+		stmt.executeUpdate();
+		
+		ResultSet result = stmt.getGeneratedKeys();
+		
+		if (!result.next())
+			throw new SQLException("No row id was returned from DB.");
+		return result.getInt(1);
+	}
 
 	public ResultSet query(String sql, Object... o) throws SQLException {
-		PreparedStatement stmt = createStatement(sql, o);
+		PreparedStatement stmt = createStatement(0,sql, o);
 
 		ResultSet set = stmt.executeQuery();
 
 		return set;
 	}
 
-	private PreparedStatement createStatement(String sql, Object... o)
+	private PreparedStatement createStatement(int data,String sql, Object... o)
 			throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement(sql);
+		PreparedStatement stmt = conn.prepareStatement(sql,data);
 
 		for (int i = 0; i < o.length; i++) {
 			switch (o[i].getClass().toString()) {

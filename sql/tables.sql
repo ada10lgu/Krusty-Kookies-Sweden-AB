@@ -67,7 +67,7 @@ CREATE TABLE pallet (
 	invoice int default null,
 	status ENUM('available','blocked','reserved') default 'available',
 	primary key(id),
-	foreign key(invoice) REFERENCES invoice(id),
+
 	foreign key(product) REFERENCES product(name)
 );
 

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -284,24 +285,87 @@ public class Factory extends Observable {
 		ArrayList<Customer> customers = new ArrayList<>();
 
 		String sql = "SELECT id,name,address FROM customer ORDER BY name ASC";
-		
+
 		try {
 			ResultSet result = db.query(sql);
-			
+
 			while (result.next()) {
 				int id = result.getInt("id");
 				String name = result.getString("name");
 				String address = result.getString("address");
-				Customer c = new Customer(id,name,address);
+				Customer c = new Customer(id, name, address);
 				customers.add(c);
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			terminate("Could not fetch customers", sql);
 		}
-		
+
 		return customers;
+	}
+
+	public synchronized int placeOrder(Customer c,
+			HashMap<Product, Integer> list) {
+
+		for (Product p : list.keySet())
+			if (!hasProduct(p, list.get(p)))
+				return 0;
+
+		int order = createOrder(c);
+
+		for (Product p : list.keySet())
+			bindProduct(p, list.get(p), order);
+
+		setChanged();
+		notifyObservers();
+		return order;
+	}
+
+	public boolean hasProduct(Product p, int ammount) {
+
+		String sql = "SELECT COUNT(*) AS ammount FROM pallet WHERE product = ? AND status = 'available'";
+
+		try {
+			ResultSet result = db.query(sql, p.getName());
+
+			if (result.next()) {
+				int n = result.getInt("ammount");
+				if (n >= ammount) {
+					return true;
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not check product ammount", sql);
+		}
+
+		return false;
+	}
+
+	public int createOrder(Customer c) {
+		String sql = "INSERT INTO invoice (customer,latestDeliveryDate) VALUES (?,?)";
+
+		try {
+			return db.insert(sql, c.getId(), "2013-01-01 12:22:12");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not create invoice", sql);
+		}
+		return 0;
+
+	}
+
+	public void bindProduct(Product p, int ammount, int order) {
+		String sql = "UPDATE pallet SET invoice = ?, status = 'reserved' WHERE product = ? AND status = 'available' LIMIT ?";
+		try {
+			db.update(sql, order, p.getName(), ammount);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not bind product to invoice", sql);
+		}
+
 	}
 
 }

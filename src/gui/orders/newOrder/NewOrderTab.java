@@ -8,12 +8,14 @@ import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import model.Customer;
 import model.Factory;
+import model.Product;
 
 @SuppressWarnings("serial")
 public class NewOrderTab extends JPanel implements ListSelectionListener,
@@ -21,8 +23,10 @@ public class NewOrderTab extends JPanel implements ListSelectionListener,
 
 	private Customer c;
 	private ProductList list;
+	private Factory f;
 
 	public NewOrderTab(Factory f) {
+		this.f = f;
 		setLayout(new BorderLayout());
 		JPanel top = new JPanel();
 
@@ -56,8 +60,34 @@ public class NewOrderTab extends JPanel implements ListSelectionListener,
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(c);
-		System.out.println(list.getList());
+
+		if (c == null) {
+			popUp("Select customer!");
+			return;
+		}
+
+		int totalAmmount = 0;
+		for (Product p : list.getList().keySet()) {
+			totalAmmount += list.getList().get(p);
+		}
+
+		if (totalAmmount == 0) {
+			popUp("The order does not have any products!");
+			return;
+		}
+
+		int order = f.placeOrder(c, list.getList());
+
+		if (order == 0) {
+			popUp("Not enough products in stock, can't place order!");
+			return;
+		}
+		
+		popUp("Order #"+order+" placed!");
+	}
+
+	private void popUp(String message) {
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 }
