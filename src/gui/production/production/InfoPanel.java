@@ -9,6 +9,7 @@ import model.Article;
 import model.Factory;
 import model.Product;
 
+@SuppressWarnings("serial")
 public class InfoPanel extends JPanel {
 
 	private JLabel label;
