@@ -17,7 +17,7 @@ public class ArticlePane extends JPanel {
 		setLayout(new BorderLayout());
 
 		JTabbedPane tabbed = new JTabbedPane();
-		tabbed.addTab("Raw materials", new RawMaterialPane(f));
+		tabbed.addTab("Storage", new RawMaterialPane(f));
 		tabbed.addTab("Recipies", new RecepiePane(f));
 		add(tabbed, BorderLayout.CENTER);
 

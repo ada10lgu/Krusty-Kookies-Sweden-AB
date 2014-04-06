@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -256,7 +257,6 @@ public class Factory extends Observable {
 				batches.add(new Batch(p, date, status));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not fetch batches.", sql);
 		}
 
@@ -273,7 +273,6 @@ public class Factory extends Observable {
 		try {
 			db.update(sql, status, product, date);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not update pallet status.", sql);
 		}
 		setChanged();
@@ -298,7 +297,6 @@ public class Factory extends Observable {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not fetch customers", sql);
 		}
 
@@ -337,7 +335,6 @@ public class Factory extends Observable {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not check product ammount", sql);
 		}
 
@@ -350,7 +347,6 @@ public class Factory extends Observable {
 		try {
 			return db.insert(sql, c.getId(), "2013-01-01 12:22:12");
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not create invoice", sql);
 		}
 		return 0;
@@ -362,7 +358,6 @@ public class Factory extends Observable {
 		try {
 			db.update(sql, order, p.getName(), ammount);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not bind product to invoice", sql);
 		}
 
@@ -372,7 +367,7 @@ public class Factory extends Observable {
 		ArrayList<Order> list = new ArrayList<>();
 
 		String sql = "SELECT id, status, customer,latestDeliveryDate FROM invoice ORDER BY id ASC";
-		
+
 		try {
 			ResultSet result = db.query(sql);
 			while (result.next()) {
@@ -380,16 +375,14 @@ public class Factory extends Observable {
 				String status = result.getString("status");
 				Customer customer = getCustomer(result.getInt("customer"));
 				String date = result.getString("latestDeliveryDate");
-				
-				Order o = new Order(id,status,customer,date);
+
+				Order o = new Order(id, status, customer, date);
 				list.add(o);
-			
+
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not get pallets related to invoice", sql);
 		}
-		
 
 		return list;
 	}
@@ -415,7 +408,6 @@ public class Factory extends Observable {
 				info.products.put(p, ammount);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not get pallets related to invoice", sql);
 		}
 
@@ -430,41 +422,38 @@ public class Factory extends Observable {
 			while (result.next()) {
 				Product p = new Product(result.getString("product"));
 				int id = result.getInt("id");
-				info.pallets.add(new Pallet(p,id));
+				info.pallets.add(new Pallet(p, id));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not get pallets related to invoice", sql);
 		}
 	}
 
 	private Customer getCustomer(int id) {
 		String sql = "SELECT name, address FROM customer WHERE id = ? LIMIT 1";
-		
+
 		try {
 			ResultSet result = db.query(sql, id);
 			if (result.next()) {
 				String name = result.getString("name");
 				String address = result.getString("address");
-				
+
 				Customer c = new Customer(id, name, address);
 				return c;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not get pallets related to invoice", sql);
 		}
-		
+
 		return null;
 	}
 
 	public synchronized void sendOrder(Order o) {
 		String sql = "UPDATE invoice SET status = 'delivered' WHERE id = ?";
-		
+
 		try {
 			db.update(sql, o.id);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not update invoice status", sql);
 		}
 		setChanged();
@@ -476,11 +465,42 @@ public class Factory extends Observable {
 		try {
 			db.update(sql, name);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			terminate("Could not create new product", sql);
 		}
 		setChanged();
 		notifyObservers();
+
+	}
+
+	public void updateProduct(Product p,
+			Map<Article, Double> articles) {
+		System.out.println("Updating " + p.toString());
+		for (Article a : articles.keySet()) {
+			System.out.println(a);
+			setProductArticle(p,a,articles.get(a)); 
+		}
+		setChanged();
+		notifyObservers();
+	}
+
+	private void setProductArticle(Product p, Article a, Double ammount) {
+		String sql = "SELECT ammount FROM ingridient WHERE product = ? AND article = ?";
+		try {
+			ResultSet result = db.query(sql, p.getName(),a.getId());
+			
+			if (result.next()) {
+				double n = result.getDouble("ammount");
+				if (n == ammount)
+					return;
+				sql = "UPDATE ingridient SET ammount = ? WHERE product = ? AND article = ?";
+			} else {
+				sql = "INSERT INTO ingridient (ammount,product,article) VALUES (?,?,?)";
+			}
+			db.update(sql, ammount,p.getName(),a.getId());
+		} catch (SQLException e) {
+			terminate("Could not update product", sql);
+		}
+		
 		
 	}
 }
