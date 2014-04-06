@@ -368,4 +368,13 @@ public class Factory extends Observable {
 
 	}
 
+	public ArrayList<Order> getOrders() {
+		ArrayList<Order> list = new ArrayList<>();
+		
+		for (int i = 0; i < 10; i++)
+			list.add(new Order(i));
+		
+		return list;
+	}
+
 }
