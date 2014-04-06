@@ -1,4 +1,4 @@
-package gui.article;
+package gui.article.raw;
 
 import java.awt.BorderLayout;
 import java.util.Observable;

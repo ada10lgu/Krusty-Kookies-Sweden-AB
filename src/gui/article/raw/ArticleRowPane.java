@@ -1,4 +1,4 @@
-package gui.article;
+package gui.article.raw;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -15,48 +15,44 @@ import model.Article;
 import model.Factory;
 
 @SuppressWarnings("serial")
-public class SpecialArticleRowPane extends JPanel implements ActionListener{
+public class ArticleRowPane extends JPanel implements ActionListener{
 
 	public static final int TEXT_HEIGHT = 23;
-	private JTextField nameField;
-	private JTextField ammountField;
-	private Factory f;
-	private RawMaterialPane topPane;
 	
-	public SpecialArticleRowPane(Factory f) {
+	private Article a;
+	private Factory f;
+	private JTextField textField;
+	
+	
+	public ArticleRowPane(Factory f, Article a) {
 		this.f = f;
+		this.a = a;
+		
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		add(new JLabel("Ammount:"));
-		ammountField = new JTextField();
+		textField = new JTextField();
 		
-		ammountField.setPreferredSize(new Dimension(100,TEXT_HEIGHT));
-		add(ammountField);
+		textField.setPreferredSize(new Dimension(100,TEXT_HEIGHT));
+		add(textField);
 		
 		JButton button = new JButton("Add");
 		button.addActionListener(this);
 		button.setPreferredSize(new Dimension(80,TEXT_HEIGHT));
 		add(button);
 		
-		nameField = new JTextField();
-		
-		nameField.setPreferredSize(new Dimension(100,TEXT_HEIGHT));
-		add(nameField);
-
+		add(new JLabel(a.getName()));
+		add(new JLabel("" + a.getAmmount() + a.getPrefix()));
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		String name = nameField.getText();
 		try {
-			int ammount;
-			ammount = Integer.parseInt(ammountField.getText());
-			
-			f.addArticle(new Article(0,name,0,""), ammount);
+			int ammount = Integer.parseInt(textField.getText());
+			f.addArticle(a, ammount);
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Must insert number");
 		}
-		
 	}
 	
 }

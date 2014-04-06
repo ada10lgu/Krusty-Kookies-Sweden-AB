@@ -1,6 +1,6 @@
 package gui;
 
-import gui.article.RawMaterialPane;
+import gui.article.ArticlePane;
 import gui.orders.OrderPane;
 import gui.production.ProductionPane;
 
@@ -25,7 +25,7 @@ public class Main extends JFrame {
 		setBackground(Color.gray);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("Raw materials", new RawMaterialPane(f));
+		tabbedPane.addTab("Raw materials", new ArticlePane(f));
 		tabbedPane.addTab("Production", new ProductionPane(f));
 		tabbedPane.addTab("Orders and Deliveries",  new OrderPane(f));
 		add(tabbedPane, BorderLayout.CENTER);
