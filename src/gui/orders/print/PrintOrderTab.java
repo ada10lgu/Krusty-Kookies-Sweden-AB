@@ -1,4 +1,4 @@
-package gui.orders;
+package gui.orders.print;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
