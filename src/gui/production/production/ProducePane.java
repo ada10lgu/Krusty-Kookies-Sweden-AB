@@ -51,6 +51,7 @@ public class ProducePane extends JPanel implements ActionListener {
 				int ammount = Integer.parseInt(ammountPanel.getText());
 				if (f.produceProduct(p, ammount)) {
 					JOptionPane.showMessageDialog(null, "Baking compleate!");
+					ammountPanel.setText("");
 				} else {
 					JOptionPane.showMessageDialog(null, "We did not have the right ammount of ingredients in stock.");
 				}

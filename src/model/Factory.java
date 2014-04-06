@@ -166,7 +166,6 @@ public class Factory extends Observable {
 
 		createPallet(p, ammount);
 
-		System.out.println(articlesNeeded);
 		setChanged();
 		notifyObservers();
 		return true;

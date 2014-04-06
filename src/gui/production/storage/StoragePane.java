@@ -29,10 +29,8 @@ public class StoragePane extends JPanel implements Observer {
 		content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 		this.content = content;
 		update(null,null);
-		
 		JScrollPane scroll = new JScrollPane(content);
 		add(scroll,BorderLayout.CENTER);
-		
 	}
 
 	@Override
