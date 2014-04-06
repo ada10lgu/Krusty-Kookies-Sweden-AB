@@ -63,7 +63,7 @@ CREATE TABLE invoiceDetails (
 CREATE TABLE pallet (
 	id int auto_increment,
 	product  varchar(255) not null,
-	bakingDate date not null,
+	bakingDate datetime not null,
 	invoice int default null,
 	status ENUM('available','blocked','reserved') default 'available',
 	primary key(id),

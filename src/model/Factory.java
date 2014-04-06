@@ -3,7 +3,11 @@ package model;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -173,9 +177,8 @@ public class Factory extends Observable {
 
 	public synchronized ArrayList<Pallet> getPallets() {
 		ArrayList<Pallet> pallets = new ArrayList<>();
-		String sql = "SELECT product, COUNT(*) as ammount FROM pallet WHERE status = 'available' GROUP BY product;";
-		sql = "SELECT name as product, (SELECT COUNT(*) FROM pallet WHERE status = 'available' AND product = name) as ammount FROM product;";
-		
+		String sql = "SELECT name as product, (SELECT COUNT(*) FROM pallet WHERE status = 'available' AND product = name) as ammount FROM product;";
+
 		try {
 			ResultSet result = db.query(sql);
 			while (result.next()) {
@@ -192,11 +195,18 @@ public class Factory extends Observable {
 	}
 
 	private void createPallet(Product p, int ammount) {
+		
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		Date today = Calendar.getInstance().getTime();        
+		String reportDate = df.format(today);
+
+		
 		for (int i = 0; i < ammount; i++) {
-			String sql = "INSERT INTO pallet (bakingDate,product) VALUES (CURDATE(),?);";
+			String sql = "INSERT INTO pallet (bakingDate,product) VALUES (?,?);";
 
 			try {
-				db.update(sql, p.getName());
+				db.update(sql,reportDate, p.getName());
 			} catch (SQLException e) {
 				terminate("Could not create a pallet", sql);
 			}
@@ -234,6 +244,30 @@ public class Factory extends Observable {
 		System.err.println("Query: " + sql);
 		System.err.println("Terminating system!");
 		System.exit(1);
+	}
+
+	public synchronized ArrayList<Batch> getBatches() {
+		ArrayList<Batch> batches = new ArrayList<>();
+
+		String sql = "SELECT product, bakingDate, 'hej' as status FROM pallet GROUP BY product,bakingDate";
+
+		try {
+			ResultSet result = db.query(sql);
+
+			while (result.next()) {
+				String product = result.getString("product");
+				String date = result.getString("bakingDate");
+				String status = result.getString("status");
+				Product p = new Product(product);
+				batches.add(new Batch(p, date, status));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not fetch batches.", sql);
+		}
+
+		return batches;
 	}
 
 }

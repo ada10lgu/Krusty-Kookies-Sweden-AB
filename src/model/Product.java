@@ -7,7 +7,7 @@ public class Product {
 	private TreeMap<Article, Double> ingridients;
 	private String name;
 
-	Product(String name) {
+	public Product(String name) {
 		this.name = name;
 		this.ingridients = null;
 	}
