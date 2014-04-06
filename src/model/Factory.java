@@ -280,4 +280,28 @@ public class Factory extends Observable {
 
 	}
 
+	public ArrayList<Customer> getCustomers() {
+		ArrayList<Customer> customers = new ArrayList<>();
+
+		String sql = "SELECT id,name,address FROM customer ORDER BY name ASC";
+		
+		try {
+			ResultSet result = db.query(sql);
+			
+			while (result.next()) {
+				int id = result.getInt("id");
+				String name = result.getString("name");
+				String address = result.getString("address");
+				Customer c = new Customer(id,name,address);
+				customers.add(c);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not fetch customers", sql);
+		}
+		
+		return customers;
+	}
+
 }

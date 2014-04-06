@@ -1,4 +1,6 @@
 package gui.orders;
+import gui.orders.customer.CustomerTab;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
