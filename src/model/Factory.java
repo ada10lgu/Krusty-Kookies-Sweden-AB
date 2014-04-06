@@ -8,8 +8,6 @@ import java.util.Observable;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-import com.mysql.jdbc.UpdatableResultSet;
-
 import model.database.Database;
 
 public class Factory extends Observable {
@@ -39,7 +37,6 @@ public class Factory extends Observable {
 
 	public ArrayList<Article> getAllRawMaterials() {
 		ArrayList<Article> data = new ArrayList<>();
-
 
 		String sql = "SELECT id, name, ammount,prefix FROM article ORDER BY name;";
 		try {
@@ -116,8 +113,6 @@ public class Factory extends Observable {
 
 			}
 
-		
-			
 		} catch (SQLException e) {
 			terminate("Could get products from the database.", sql);
 		}
@@ -162,27 +157,46 @@ public class Factory extends Observable {
 			if (!hasArticle(id, n))
 				return false;
 		}
-		
+
 		for (int id : articlesNeeded.keySet()) {
 			int n = articlesNeeded.get(id);
-			
-			reduceArticle(id,n);
+
+			reduceArticle(id, n);
 		}
+
+		createPallet(p, ammount);
 
 		System.out.println(articlesNeeded);
 		setChanged();
 		notifyObservers();
 		return true;
 	}
+	
+	public synchronized ArrayList<Pallet> getPallets() {
+		return null;
+	}
+	
+
+	private void createPallet(Product p, int ammount) {
+		for (int i = 0; i < ammount; i++) {
+			String sql = "INSERT INTO pallet (bakingDate,product) VALUES (CURDATE(),?);";
+
+			try {
+				db.update(sql, p.getName());
+			} catch (SQLException e) {
+				terminate("Could not create a pallet", sql);
+			}
+		}
+
+	}
 
 	private void reduceArticle(int id, int n) {
 		String sql = "UPDATE article SET ammount = ammount - ? WHERE id = ? ";
 		try {
-			db.update(sql,n, id);
+			db.update(sql, n, id);
 		} catch (SQLException e) {
 			terminate("Could not alter the ammount of an article.", sql);
 		}
-
 	}
 
 	private boolean hasArticle(int id, int n) {

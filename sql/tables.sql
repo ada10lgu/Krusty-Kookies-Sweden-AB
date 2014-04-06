@@ -62,11 +62,13 @@ CREATE TABLE invoiceDetails (
 
 CREATE TABLE pallet (
 	id int auto_increment,
+	product  varchar(255) not null,
 	bakingDate date not null,
-	invoice int not null,
+	invoice int default null,
 	status ENUM('available','blocked','reserved') default 'available',
 	primary key(id),
-	foreign key(invoice) REFERENCES invoice(id)
+	foreign key(invoice) REFERENCES invoice(id),
+	foreign key(product) REFERENCES product(name)
 );
 
 INSERT INTO customer (name, address) VALUES ("Finkakor AB","Helsingborg");

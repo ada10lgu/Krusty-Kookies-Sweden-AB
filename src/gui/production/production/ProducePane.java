@@ -1,4 +1,4 @@
-package gui.production;
+package gui.production.production;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

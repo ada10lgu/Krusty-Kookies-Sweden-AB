@@ -1,4 +1,4 @@
-package gui.production;
+package gui.production.production;
 
 import java.util.HashMap;
 
