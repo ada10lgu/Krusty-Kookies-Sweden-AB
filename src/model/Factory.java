@@ -474,9 +474,7 @@ public class Factory extends Observable {
 
 	public void updateProduct(Product p,
 			Map<Article, Double> articles) {
-		System.out.println("Updating " + p.toString());
 		for (Article a : articles.keySet()) {
-			System.out.println(a);
 			setProductArticle(p,a,articles.get(a)); 
 		}
 		setChanged();
