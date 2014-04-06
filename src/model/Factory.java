@@ -378,7 +378,7 @@ public class Factory extends Observable {
 			while (result.next()) {
 				int id = result.getInt("id");
 				String status = result.getString("status");
-				int customer = result.getInt("customer");
+				Customer customer = getCustomer(result.getInt("customer"));
 				String date = result.getString("latestDeliveryDate");
 				
 				Order o = new Order(id,status,customer,date);
@@ -438,4 +438,23 @@ public class Factory extends Observable {
 		}
 	}
 
+	private Customer getCustomer(int id) {
+		String sql = "SELECT name, address FROM customer WHERE id = ? LIMIT 1";
+		
+		try {
+			ResultSet result = db.query(sql, id);
+			if (result.next()) {
+				String name = result.getString("name");
+				String address = result.getString("address");
+				
+				Customer c = new Customer(id, name, address);
+				return c;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not get pallets related to invoice", sql);
+		}
+		
+		return null;
+	}
 }

@@ -19,6 +19,12 @@ public class OrderInfo {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(o).append("\n");
+		sb.append("Status:\t").append(o.status).append("\n");
+		sb.append("Latest delivery:\t").append(o.date).append("\n");
+		sb.append("Customer\t").append(o.customer.name).append("\n");
+		sb.append("Delivery address:\n").append(o.customer.address);
+		sb.append("\n\n");
+		
 		sb.append("\nSummation of order:\n");
 		for (Product p: products.keySet()) {
 			sb.append("* ");

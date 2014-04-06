@@ -22,6 +22,7 @@ public class OrderList extends JPanel implements Observer {
 	
 	public OrderList(Factory f,ListSelectionListener listener) {
 		this.f = f;
+		f.addObserver(this);
 		this.listener = listener;
 		setLayout(new BorderLayout());
 		update(null,null);

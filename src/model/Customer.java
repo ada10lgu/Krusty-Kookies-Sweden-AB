@@ -2,9 +2,9 @@ package model;
 
 public class Customer {
 
-	private int id;
-	private String name;
-	private String address;
+	 int id;
+	 String name;
+	 String address;
 	
 	public Customer(int id, String name, String address) {
 		this.id = id;
