@@ -195,23 +195,18 @@ public class Factory extends Observable {
 	}
 
 	private void createPallet(Product p, int ammount) {
-		
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-		Date today = Calendar.getInstance().getTime();        
+		Date today = Calendar.getInstance().getTime();
 		String reportDate = df.format(today);
 
-		
 		for (int i = 0; i < ammount; i++) {
 			String sql = "INSERT INTO pallet (bakingDate,product) VALUES (?,?);";
-
 			try {
-				db.update(sql,reportDate, p.getName());
+				db.update(sql, reportDate, p.getName());
 			} catch (SQLException e) {
 				terminate("Could not create a pallet", sql);
 			}
 		}
-
 	}
 
 	private void reduceArticle(int id, int n) {
@@ -235,7 +230,6 @@ public class Factory extends Observable {
 		} catch (SQLException e) {
 			terminate("Could not calculate ammount of an article.", sql);
 		}
-
 		return false;
 	}
 
@@ -248,8 +242,7 @@ public class Factory extends Observable {
 
 	public synchronized ArrayList<Batch> getBatches() {
 		ArrayList<Batch> batches = new ArrayList<>();
-
-		String sql = "SELECT product, bakingDate, 'hej' as status FROM pallet GROUP BY product,bakingDate";
+		String sql = "SELECT product, bakingDate, status FROM pallet GROUP BY product,bakingDate";
 
 		try {
 			ResultSet result = db.query(sql);
@@ -261,13 +254,30 @@ public class Factory extends Observable {
 				Product p = new Product(product);
 				batches.add(new Batch(p, date, status));
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			terminate("Could not fetch batches.", sql);
 		}
 
 		return batches;
+	}
+
+	public synchronized void changeBatch(Batch batch) {
+		String date = batch.getDate();
+		String product = batch.getProduct();
+		String status = (batch.getStatus().equals("available")) ? "blocked"
+				: "available";
+
+		String sql = "UPDATE pallet SET status = ? WHERE product = ? AND bakingDate = ?";
+		try {
+			db.update(sql, status, product, date);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not update pallet status.", sql);
+		}
+		setChanged();
+		notifyObservers();
+
 	}
 
 }

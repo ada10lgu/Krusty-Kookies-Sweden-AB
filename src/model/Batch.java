@@ -16,4 +16,20 @@ public class Batch {
 	public String toString() {
 		return p.getName() + ": " + date + " <" + status + ">";
 	}
+	
+	public String getNegatedStatus() {
+		if (status.equals("available"))
+			return "Block";
+		return "Unblock";
+	}
+
+	String getProduct() {
+		return p.getName();
+	}
+	String getDate() {
+		return date;
+	}
+	String getStatus() {
+		return status;
+	}
 }
