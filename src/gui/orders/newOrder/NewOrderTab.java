@@ -79,7 +79,7 @@ public class NewOrderTab extends JPanel implements ListSelectionListener,
 		int order = f.placeOrder(c, list.getList());
 
 		if (order == 0) {
-			popUp("Not enough products in stock, can't place order!");
+			popUp("Not enough cookies in stock, can't place order!");
 			return;
 		}
 		
