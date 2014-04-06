@@ -24,12 +24,10 @@ public class Main extends JFrame {
 		setSize(600, 600);
 		setBackground(Color.gray);
 
-		OrderPane p3 = new OrderPane();
-
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("Raw materials", new RawMaterialPane(f));
 		tabbedPane.addTab("Production", new ProductionPane(f));
-		tabbedPane.addTab("Orders and Deliveries", p3);
+		tabbedPane.addTab("Orders and Deliveries",  new OrderPane(f));
 		add(tabbedPane, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
