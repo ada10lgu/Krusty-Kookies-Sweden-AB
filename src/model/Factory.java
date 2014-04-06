@@ -422,7 +422,20 @@ public class Factory extends Observable {
 	}
 
 	private void fillWithPallets(OrderInfo info) {
-		
+		int order = info.o.id;
+
+		String sql = "SELECT product, id FROM pallet WHERE invoice = ? ";
+		try {
+			ResultSet result = db.query(sql, order);
+			while (result.next()) {
+				Product p = new Product(result.getString("product"));
+				int id = result.getInt("id");
+				info.pallets.add(new Pallet(p,id));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not get pallets related to invoice", sql);
+		}
 	}
 
 }
