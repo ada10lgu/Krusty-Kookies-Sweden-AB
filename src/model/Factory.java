@@ -171,11 +171,26 @@ public class Factory extends Observable {
 		notifyObservers();
 		return true;
 	}
-	
+
 	public synchronized ArrayList<Pallet> getPallets() {
-		return null;
+		ArrayList<Pallet> pallets = new ArrayList<>();
+		String sql = "SELECT product, COUNT(*) as ammount FROM pallet WHERE status = 'available' GROUP BY product;";
+		sql = "SELECT name as product, (SELECT COUNT(*) FROM pallet WHERE status = 'available' AND product = name) as ammount FROM product;";
+		
+		try {
+			ResultSet result = db.query(sql);
+			while (result.next()) {
+				String name = result.getString("product");
+				int ammount = result.getInt("ammount");
+				Product p = new Product(name);
+				Pallet pallet = new Pallet(p, ammount);
+				pallets.add(pallet);
+			}
+		} catch (SQLException e) {
+			terminate("Could not fetch pallets", sql);
+		}
+		return pallets;
 	}
-	
 
 	private void createPallet(Product p, int ammount) {
 		for (int i = 0; i < ammount; i++) {
