@@ -457,4 +457,17 @@ public class Factory extends Observable {
 		
 		return null;
 	}
+
+	public void sendOrder(Order o) {
+		String sql = "UPDATE invoice SET status = 'delivered' WHERE id = ?";
+		
+		try {
+			db.update(sql, o.id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not update invoice status", sql);
+		}
+		setChanged();
+		notifyObservers();
+	}
 }

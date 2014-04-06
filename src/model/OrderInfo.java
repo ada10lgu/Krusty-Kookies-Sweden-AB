@@ -41,4 +41,12 @@ public class OrderInfo {
 		
 		return sb.toString();
 	}
+
+	public boolean isPending() {
+		return o.status.equals("pending");
+	}
+
+	public Order getOrder() {
+		return o;
+	}
 }
