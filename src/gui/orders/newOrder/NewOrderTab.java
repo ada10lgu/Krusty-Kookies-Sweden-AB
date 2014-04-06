@@ -1,4 +1,4 @@
-package gui.orders;
+package gui.orders.newOrder;
 
 import javax.swing.JPanel;
 

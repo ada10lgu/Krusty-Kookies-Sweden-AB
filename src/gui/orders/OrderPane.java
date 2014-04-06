@@ -1,5 +1,6 @@
 package gui.orders;
 import gui.orders.customer.CustomerTab;
+import gui.orders.newOrder.NewOrderTab;
 
 import java.awt.BorderLayout;
 
