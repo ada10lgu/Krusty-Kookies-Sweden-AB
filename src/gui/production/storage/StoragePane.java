@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import model.Factory;
-import model.Pallet;
+import model.PalletGroup;
 
 @SuppressWarnings("serial")
 public class StoragePane extends JPanel implements Observer {
@@ -36,8 +36,8 @@ public class StoragePane extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		content.removeAll();
-		ArrayList<Pallet> pallets = f.getPallets();
-		for (Pallet p : pallets) {
+		ArrayList<PalletGroup> pallets = f.getPallets();
+		for (PalletGroup p : pallets) {
 			content.add(new PalletPane(p));
 		}
 	}

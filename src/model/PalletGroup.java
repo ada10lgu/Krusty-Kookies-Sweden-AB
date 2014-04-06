@@ -1,10 +1,10 @@
 package model;
 
-public class Pallet {
+public class PalletGroup {
 	private Product p;
 	private int ammount;
 
-	public Pallet(Product p, int ammount) {
+	public PalletGroup(Product p, int ammount) {
 		this.p = p;
 		this.ammount = ammount;
 	}

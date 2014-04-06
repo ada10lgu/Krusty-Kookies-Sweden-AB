@@ -176,8 +176,8 @@ public class Factory extends Observable {
 		return true;
 	}
 
-	public synchronized ArrayList<Pallet> getPallets() {
-		ArrayList<Pallet> pallets = new ArrayList<>();
+	public synchronized ArrayList<PalletGroup> getPallets() {
+		ArrayList<PalletGroup> pallets = new ArrayList<>();
 		String sql = "SELECT name as product, (SELECT COUNT(*) FROM pallet WHERE status = 'available' AND product = name) as ammount FROM product;";
 
 		try {
@@ -186,7 +186,7 @@ public class Factory extends Observable {
 				String name = result.getString("product");
 				int ammount = result.getInt("ammount");
 				Product p = new Product(name);
-				Pallet pallet = new Pallet(p, ammount);
+				PalletGroup pallet = new PalletGroup(p, ammount);
 				pallets.add(pallet);
 			}
 		} catch (SQLException e) {
@@ -370,11 +370,59 @@ public class Factory extends Observable {
 
 	public ArrayList<Order> getOrders() {
 		ArrayList<Order> list = new ArrayList<>();
+
+		String sql = "SELECT id, status, customer,latestDeliveryDate FROM invoice ORDER BY id ASC";
 		
-		for (int i = 0; i < 10; i++)
-			list.add(new Order(i));
+		try {
+			ResultSet result = db.query(sql);
+			while (result.next()) {
+				int id = result.getInt("id");
+				String status = result.getString("status");
+				int customer = result.getInt("customer");
+				String date = result.getString("latestDeliveryDate");
+				
+				Order o = new Order(id,status,customer,date);
+				list.add(o);
+			
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not get pallets related to invoice", sql);
+		}
 		
+
 		return list;
+	}
+
+	public model.OrderInfo getOrderInfo(Order o) {
+		OrderInfo info = new OrderInfo(o);
+
+		fillWithProducts(info);
+		fillWithPallets(info);
+
+		return info;
+	}
+
+	private void fillWithProducts(OrderInfo info) {
+		int order = info.o.id;
+
+		String sql = "SELECT product, COUNT(*) as ammount FROM pallet WHERE invoice = ? GROUP BY product";
+		try {
+			ResultSet result = db.query(sql, order);
+			while (result.next()) {
+				Product p = new Product(result.getString("product"));
+				int ammount = result.getInt("ammount");
+				info.products.put(p, ammount);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not get pallets related to invoice", sql);
+		}
+
+	}
+
+	private void fillWithPallets(OrderInfo info) {
+		
 	}
 
 }

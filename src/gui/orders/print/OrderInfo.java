@@ -14,7 +14,10 @@ import model.Order;
 public class OrderInfo extends JTextArea implements Observer,
 		ListSelectionListener {
 
+	private Factory f;
+	
 	public OrderInfo(Factory f) {
+		this.f = f;
 		setEditable(false);
 	}
 
@@ -28,8 +31,10 @@ public class OrderInfo extends JTextArea implements Observer,
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getValueIsAdjusting())
 			return;
+		@SuppressWarnings("unchecked")
 		JList<Order> list = (JList<Order>) e.getSource();
-		setText(list.getSelectedValue().toString());
-
+		
+		model.OrderInfo info = f.getOrderInfo(list.getSelectedValue());
+		setText(info.toString());
 	}
 }
