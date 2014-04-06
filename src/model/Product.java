@@ -19,22 +19,9 @@ public class Product {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(name);
-		if (ingridients != null) {
-			sb.append("\n");
-			for (Article a : ingridients.keySet()) {
-				sb.append("\t");
-				sb.append(a.getName()).append(" ");
-				sb.append(ingridients.get(a)).append(a.getPrefix())
-						.append("\n");
-
-			}
-		}
-		return sb.toString();
+		return name;
 	}
-
+	
 	public String getName() {
 		return name;
 	}

@@ -458,7 +458,7 @@ public class Factory extends Observable {
 		return null;
 	}
 
-	public void sendOrder(Order o) {
+	public synchronized void sendOrder(Order o) {
 		String sql = "UPDATE invoice SET status = 'delivered' WHERE id = ?";
 		
 		try {
@@ -469,5 +469,18 @@ public class Factory extends Observable {
 		}
 		setChanged();
 		notifyObservers();
+	}
+
+	public synchronized void addRecepie(String name) {
+		String sql = "INSERT INTO product (name) VALUES (?)";
+		try {
+			db.update(sql, name);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			terminate("Could not create new product", sql);
+		}
+		setChanged();
+		notifyObservers();
+		
 	}
 }
